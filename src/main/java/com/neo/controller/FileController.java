@@ -80,7 +80,12 @@ public class FileController {
     	
     }
 
-    
+    @GetMapping("/downloadData") // //new annotation since 4.3
+    public void downloadData(HttpServletRequest request, 
+    		HttpServletResponse response) throws IOException {
+    	List<User> users = userService.getAll();
+    	ExcelUtil.dataToExcel(users, response);
+    }
     
     @GetMapping("/uploadStatus")
     public String uploadStatus() {

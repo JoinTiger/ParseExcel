@@ -2,6 +2,7 @@ package com.neo.test;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -30,23 +31,16 @@ public class WebTest {
 		
 	
 		
-		User user1 = new User();
-		User user2 = new User();
-		User user3 = new User();
 		
-		user1.setUsername("11aa");
-		user1.setPassword("daf34");
+		List<User> all = userService.getAll();
 		
-		user2.setUsername("22bb");
-		user2.setPassword("daf33");
-		
-		user3.setUsername("3cc");
-		user3.setPassword("daf5fd");
-		
-		
-		userService.save(user1);
-		userService.save(user2);
-		userService.save(user3);
+		for(User user : all) {
+			System.out.print(user.getId() + "            ");
+			System.out.print(user.getUsername() + "            ");
+			System.out.print(user.getPassword() + "            ");
+			System.out.print(user.getRegTime() + "            ");
+			System.out.println();
+		}
 	}
 
 }
