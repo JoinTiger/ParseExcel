@@ -14,6 +14,7 @@ import com.neo.util.ExcelUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -44,9 +45,14 @@ public class FileController {
             return "upload";
         }
 
+        
         List<User> users = ExcelUtil.getUsers(file);
         
         userService.saveAll(users);
+        
+        users.clear();
+        users = null;
+        
         redirectAttributes.addFlashAttribute("message",
                  "上传文件成功 '" + file.getOriginalFilename() + "'");
 
@@ -56,27 +62,60 @@ public class FileController {
 
     @GetMapping("/download") // //new annotation since 4.3
     public void download(HttpServletRequest request, 
-    		HttpServletResponse response) throws IOException {
+    		HttpServletResponse response) {
 		response.setCharacterEncoding("UTF-8");
 		//设置ContentType字段值
 		response.setContentType("text/html;charset=utf-8");
 		//获取所要下载的文件
 		String filename = request.getParameter("filename");
 		String folder = "classpath:files/";
-		File file = ResourceUtils.getFile(folder + filename);
-		//通知浏览器以下载的方式打开
-		response.addHeader("Content-type", "appllication/octet-stream");
-		response.addHeader("Content-Disposition", "attachment;filename="+filename);
-		//通知文件流读取文件
-		InputStream in = new FileInputStream(file);
-		//获取response对象的输出流
-		OutputStream out = response.getOutputStream();
-		byte[] buffer = new byte[1024];
-		int len;
-		//循环取出流中的数据
-		while((len = in.read(buffer)) != -1){
-			out.write(buffer,0,len);
-		}
+		
+		File file = null;
+		InputStream in = null;
+		OutputStream out = null;
+		try {
+			file = ResourceUtils.getFile(folder + filename);
+			//通知浏览器以下载的方式打开
+			in = new FileInputStream(file);
+			out = response.getOutputStream();
+			response.addHeader("Content-type", "appllication/octet-stream");
+			response.addHeader("Content-Disposition", "attachment;filename="+filename);
+			//通知文件流读取文件
+			
+			byte[] buffer = new byte[1024];
+			int len;
+			//循环取出流中的数据
+			
+			while((len = in.read(buffer)) != -1){
+				out.write(buffer,0,len);
+			}
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}  catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				 {
+					try {
+						if(out != null) {
+							out.close();
+							out = null;
+						}
+						
+						if(in != null) {
+							in.close();
+							in = null;
+						}
+						
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			}
     	
     }
 
@@ -85,6 +124,8 @@ public class FileController {
     		HttpServletResponse response) throws IOException {
     	List<User> users = userService.getAll();
     	ExcelUtil.dataToExcel(users, response);
+    	users.clear();
+    	users = null;
     }
     
     @GetMapping("/uploadStatus")

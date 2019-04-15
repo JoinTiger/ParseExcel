@@ -40,22 +40,30 @@ public class ExcelUtil {
 	}
 	
 	
-	public static List<Map<String,String>> ExcelToList(MultipartFile file) throws Exception{
+	public static List<Map<String,String>> ExcelToList(MultipartFile file) {
 		
 		
 		List<Map<String,String>> mapList = new ArrayList<Map<String,String>>();
 		
 		String fileName = file.getOriginalFilename();
 		String filetype = fileName.substring(fileName.lastIndexOf(".") + 1);
-		InputStream fi = file.getInputStream();
+		InputStream fi = null;
+		try {
+			fi = file.getInputStream();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
-		if(fi == null)
-			throw new Exception("文件不存在");
+		
 		//xls文件
+		HSSFWorkbook hwookbook = null;
+		XSSFWorkbook xwookbook = null;
+		
 		if("xls".equals(filetype.toLowerCase())){
 			try {
-				HSSFWorkbook wookbook = new HSSFWorkbook(fi);
-				HSSFSheet sheet = wookbook.getSheet("Sheet1");
+				hwookbook = new HSSFWorkbook(fi);
+				HSSFSheet sheet = hwookbook.getSheet("Sheet1");
 				int rows = sheet.getPhysicalNumberOfRows();
 				
 				//获取标题行
@@ -106,12 +114,37 @@ public class ExcelUtil {
 				e.printStackTrace();
 			} catch(Exception e){
 				e.printStackTrace();
+			} finally {
+				
+				try {
+					if(fi != null) {
+						fi.close();
+						fi = null;
+					}
+					
+					if(hwookbook != null) {
+						hwookbook.close();
+						hwookbook = null;
+					}
+					
+					if(xwookbook != null) {
+						xwookbook.close();
+						xwookbook = null;
+					}
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-		}else if("xlsx".equals(filetype.toLowerCase())){
+				
+
+			
+		} else if("xlsx".equals(filetype.toLowerCase())){
 			//xlsx文件
 			try {
-				XSSFWorkbook wookbook = new XSSFWorkbook(fi);
-				XSSFSheet sheet = wookbook.getSheet("Sheet1");
+				xwookbook = new XSSFWorkbook(fi);
+				XSSFSheet sheet = xwookbook.getSheet("Sheet1");
 				int rows = sheet.getPhysicalNumberOfRows();
 				//获取标题行
 				XSSFRow title = sheet.getRow(0);
@@ -157,13 +190,31 @@ public class ExcelUtil {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} finally {
+				
+				try {
+					if(fi != null) {
+						fi.close();
+						fi = null;
+					}
+					
+					if(hwookbook != null) {
+						hwookbook.close();
+						hwookbook = null;
+					}
+					
+					if(xwookbook != null) {
+						xwookbook.close();
+						xwookbook = null;
+					}
+					
+				} catch(IOException e) {
+					e.printStackTrace();
+				}
+				
+				
 			}
 		}
-		
-		
-		
-		if(fi != null)
-			fi.close();
 		
 		return mapList;
 	}
@@ -227,25 +278,11 @@ public class ExcelUtil {
 		row.setHeight((short) (26.25 * 20));
 		row.createCell(0).setCellValue("用户信息列表");//为第一行单元格设值
 
-		/*为标题设计空间
-		* firstRow从第1行开始
-		* lastRow从第0行结束
-		*
-		*从第1个单元格开始
-		* 从第3个单元格结束
-		*/
+
 		CellRangeAddress rowRegion = new CellRangeAddress(0, 0, 0, 3);
 		sheet.addMergedRegion(rowRegion);
 
-		/*CellRangeAddress columnRegion = new CellRangeAddress(1,4,0,0);
-		sheet.addMergedRegion(columnRegion);*/
 
-
-		/*
-		* 动态获取数据库列 sql语句 select COLUMN_NAME from INFORMATION_SCHEMA.Columns where table_name='user' and table_schema='test'
-		* 第一个table_name 表名字
-		* 第二个table_name 数据库名称
-		* */
 		row = sheet.createRow(1);
 		row.setHeight((short) (22.50 * 20));//设置行高
 		row.createCell(0).setCellValue("用户Id");//为第一个单元格设值
@@ -272,7 +309,16 @@ public class ExcelUtil {
 		response.setHeader("Content-disposition", "attachment;filename=data.xls");//默认Excel名称
 		wb.write(os);
 		os.flush();
-		os.close();
+		
+		if(os != null) {
+			os.close();
+			os = null;
+		}
+		
+		if(wb != null) {
+			wb.close();
+			wb = null;
+		}
 	}
 	
  	public static boolean isBlankRow(HSSFRow row, int index, int rowCount){
