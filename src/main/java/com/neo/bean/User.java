@@ -2,6 +2,8 @@ package com.neo.bean;
 
 
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,12 +54,12 @@ public class User  {
     
     //日期
     @Column(nullable = false)
-    private String regTime;
+    private Date regTime;
 
     public User() {
     }
 
-	public User(Long id, String username, String password, String regTime) {
+	public User(Long id, String username, String password, Date regTime) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -89,15 +91,18 @@ public class User  {
 		this.password = password;
 	}
 
-	public String getRegTime() {
+	public Date getRegTime() {
 		return regTime;
 	}
 
-	public void setRegTime(String regTime) {
+	public void setRegTime(Date regTime) {
 		this.regTime = regTime;
 	}
 
-	
     
-
+	
+	
+	
+	
+	
 }	

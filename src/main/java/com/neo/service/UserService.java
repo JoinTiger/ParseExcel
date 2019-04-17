@@ -1,7 +1,7 @@
 package com.neo.service;
 
-import java.text.DateFormat;
 import java.util.Date;
+import java.text.DateFormat;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -25,9 +25,8 @@ public class UserService {
 	@Query
 	public void save(User user) {
 		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
-		String formattedDate = dateFormat.format(date);
-		user.setRegTime(formattedDate);
+		
+		user.setRegTime(date);
 		userRep.save(user);
 	}
 	
@@ -37,10 +36,9 @@ public class UserService {
 	@Query
 	public void saveAll(List<User> users) {
 		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
-		String formattedDate = dateFormat.format(date);
+		
 		for(User user : users) {
-			user.setRegTime(formattedDate);
+			user.setRegTime(date);
 			userRep.save(user);
 		}
 	}

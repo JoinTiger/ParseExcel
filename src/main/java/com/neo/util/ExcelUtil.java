@@ -4,15 +4,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletResponse;
-
-import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -293,10 +293,14 @@ public class ExcelUtil {
 		for (int i = 0; i < users.size(); i++) {
 			row = sheet.createRow(i + 2);
 			User user = users.get(i);
+			
+			SimpleDateFormat format0 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			
 			row.createCell(0).setCellValue(user.getId());
 			row.createCell(1).setCellValue(user.getUsername());
 			row.createCell(2).setCellValue(user.getPassword());
-			row.createCell(3).setCellValue(user.getRegTime());
+			row.createCell(3).setCellValue(format0.format(user.getRegTime()));
+			
 		}
 		sheet.setDefaultRowHeight((short) (16.5 * 20));
 		//列宽自适应
