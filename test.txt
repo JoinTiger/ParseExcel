@@ -1,0 +1,34 @@
+
+
+create table person(
+id varchar(32) primary key,
+name varchar(30),
+sex char(1),
+age int
+);
+
+
+insert into person values('P1001','dog','0',25);
+insert into person values('P1002','wangfen','0',24);
+insert into person values('P1003','Tom','1',25);
+insert into person values('P1004','Rose','0',23);
+
+
+create table car(
+id varchar(32) primary key,
+name varchar(30),
+price numeric(10,2),
+pid varchar(32),
+constraint car_fk foreign key(pid) references person(id)
+);
+
+insert into car values('C001','BMW',82.5, 'P1001');
+insert into car values('C002','BMW',111.5, 'P1001');
+insert into car values('C003','Benz',78.5, 'P1001');
+insert into car values('C004','BMW',55.5, 'P1002');
+insert into car values('C005','Audio',82.5, 'P1002');
+insert into car values('C006','QQ',6.5, 'P1003');
+
+
+select p.id, p.name, p.sex, p.age, c.id, c.name, c.price, c.pid from person p join car c
+on(p.id = c.pid);

@@ -44,7 +44,6 @@ public class UserService {
 	}
 	
 	@Transactional
-	@Modifying
 	@Query
 	public List<User> getAll() {
 		List<User> users = userRep.findAll();
