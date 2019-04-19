@@ -12,16 +12,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-@Entity(name="record")
+@Entity
 public class Record {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 	
 //	@Column(unique=true, nullable=false)
 //	private String batchID;
-	@Column(nullable=false, name="macSn")
+	
+	@Column(name="mac_sn", nullable=false, unique=true)
 	private String macSn;
 	
 	private String nCNum;
@@ -34,7 +36,7 @@ public class Record {
 	
 	
 
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="record", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<SubRecord> subs= new HashSet<SubRecord>();
 	
 	public Record() {

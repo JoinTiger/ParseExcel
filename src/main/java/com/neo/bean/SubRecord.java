@@ -7,36 +7,29 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-@Entity(name="subRecord")
+@Entity
 public class SubRecord {
 	
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 	
-	
-
-	private String macSn;
-	
-	
 	private String sVNum;
-
-//	private String motorNum;
 	
-
+	@ManyToOne(targetEntity = Record.class )
+	@JoinColumn(name="mac_sn", referencedColumnName="mac_sn")
+	private Record record;
 
 	public SubRecord() {
 		super();
 	}
 
-	
-	public SubRecord(Long id, String macSn, String sVNum) {
+	public SubRecord(Long id, String sVNum, Record record) {
 		super();
 		this.id = id;
-		this.macSn = macSn;
 		this.sVNum = sVNum;
+		this.record = record;
 	}
-
 
 	public Long getId() {
 		return id;
@@ -46,14 +39,6 @@ public class SubRecord {
 		this.id = id;
 	}
 
-	public String getMacSn() {
-		return macSn;
-	}
-
-	public void setMacSn(String macSn) {
-		this.macSn = macSn;
-	}
-
 	public String getsVNum() {
 		return sVNum;
 	}
@@ -61,9 +46,15 @@ public class SubRecord {
 	public void setsVNum(String sVNum) {
 		this.sVNum = sVNum;
 	}
-	
 
-	
+	public Record getRecord() {
+		return record;
+	}
+
+	public void setRecord(Record record) {
+		this.record = record;
+	}
+
 	
 	
 	
