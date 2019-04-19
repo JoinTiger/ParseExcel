@@ -1,5 +1,6 @@
 package com.neo.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +16,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-public class Record {
+public class Record implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -50394004543436756L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;

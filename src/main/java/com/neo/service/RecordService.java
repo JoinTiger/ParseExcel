@@ -1,5 +1,6 @@
 package com.neo.service;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +15,12 @@ import com.neo.bean.Record;
 import com.neo.repository.RecordRep;
 
 @Service
-public class RecordService {
+public class RecordService implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 310976488816930L;
 	@Resource
 	private RecordRep recordRep;
 	
