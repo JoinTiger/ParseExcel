@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.neo.bean.User;
+import com.neo.service.RecordService;
 import com.neo.service.UserService;
 import com.neo.util.ExcelUtil;
 
@@ -32,6 +33,8 @@ public class FileController {
     @Resource
     private UserService userService;
     
+    @Resource
+    private RecordService recordService;
 
     @GetMapping("/")
     public String index() {
@@ -45,6 +48,7 @@ public class FileController {
             return "upload";
         }
 
+        
         
         List<User> users = ExcelUtil.getUsers(file);
         

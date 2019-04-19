@@ -27,6 +27,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.neo.bean.Record;
 import com.neo.bean.User;
 
 
@@ -263,6 +264,84 @@ public class ExcelUtil {
 		
 		return ret;
 	}
+	
+	
+	public static List<Record> getExcelRecords(List<Map<String,String>> maps) {
+		List<Record> ret = new ArrayList<Record>();
+		
+		String macSn = "";
+		String nCNum = "";
+		String iPCNum = "";
+		String contractNum = "";
+		String sVNum = "";
+		String motorNum = "";
+		
+		
+		for(Map<String, String> map : maps) {
+			
+			macSn = "";       
+			nCNum = "";       
+			iPCNum = "";      
+			contractNum = ""; 
+			sVNum = "";       
+			motorNum = "";    
+			
+			Iterator<Entry<String, String>> iterator = map.entrySet().iterator();
+			while(iterator.hasNext()) {
+				Entry<String, String> next = iterator.next();
+				
+				String key = next.getKey();
+				
+				switch(key) {
+				
+				case "系统SN号(MacSn)":
+					macSn = next.getValue();
+					break;
+				case "生产提供的数控装置编号(NCNum)":
+					nCNum = next.getValue();
+					break;
+				case "生产提供的IPC编号(IPCNum)":
+					iPCNum = next.getValue();
+					break;
+
+					
+					
+				case "合同编号(ContractNum)":
+					contractNum = next.getValue();
+					break;
+				case "伺服驱动编号(SVNum)":
+					sVNum = next.getValue();
+					break;
+				case "电机编号(MotorNum)":
+					motorNum = next.getValue();
+					break;
+					
+				}
+				
+				
+
+			}
+			
+			if(macSn == null || nCNum == null || iPCNum == null) continue;
+			
+//			if(username == null || password == null) continue;
+//			if(username.trim().equals("") || password.trim().equals("")) continue;
+//			
+//			User user = new User();
+//			
+//			user.setUsername(username);
+//			user.setPassword(password);
+//			
+//			ret.add(user);
+			
+		}
+		
+		
+		return ret;
+	}
+	
+	
+	
 	
 	
 	public static void dataToExcel(List<User> users, HttpServletResponse response) throws IOException {
